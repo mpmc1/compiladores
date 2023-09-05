@@ -105,6 +105,34 @@ namespace Compilador_22023.AnalisisLexico
                 {
                     ProcesarEstado4();
                 }
+                else if ("q5".Equals(estadoActual))
+                {
+                    ProcesarEstado5();
+                }
+                else if ("q6".Equals(estadoActual))
+                {
+                    ProcesarEstado6();
+                }
+                else if ("q7".Equals(estadoActual))
+                {
+                    ProcesarEstado7();
+                }
+                else if ("q8".Equals(estadoActual))
+                {
+                    ProcesarEstado8();
+                }
+                else if ("q9".Equals(estadoActual))
+                {
+                    ProcesarEstado9();
+                }
+                else if ("q10".Equals(estadoActual))
+                {
+                    ProcesarEstado10();
+                }
+                else if ("q11".Equals(estadoActual))
+                {
+                    ProcesarEstado11();
+                }
                 else if ("q12".Equals(estadoActual))
                 {
                     ProcesarEstado12();
@@ -133,6 +161,26 @@ namespace Compilador_22023.AnalisisLexico
                 {
                     ProcesarEstado18();
                 }
+                else if ("q19".Equals(estadoActual))
+                {
+                    ProcesarEstado19();
+                }
+                else if ("q33".Equals(estadoActual))
+                {
+                    ProcesarEstado33();
+                }
+                else if ("q34".Equals(estadoActual))
+                {
+                    ProcesarEstado34();
+                }
+                else if ("q35".Equals(estadoActual))
+                {
+                    ProcesarEstado35();
+                }
+                else if ("q36".Equals(estadoActual))
+                {
+                    ProcesarEstado36();
+                }
             }
             //Temporal
             while (!UtilTexto.EsEOF(caracterActual))
@@ -150,7 +198,39 @@ namespace Compilador_22023.AnalisisLexico
             {
                 estadoActual = "q4";
             }
-            else if((UtilTexto.EsEOF(caracterActual)))
+            else if ((UtilTexto.EsDigito(caracterActual)))
+            {
+                estadoActual = "q1";
+            }
+            else if (UtilTexto.EsSignoSuma(caracterActual))
+            {
+                estadoActual = "q5";
+            }
+            else if (UtilTexto.EsSignoResta(caracterActual))
+            {
+                estadoActual = "q6";
+            }
+            else if (UtilTexto.EsSignoAsterisco(caracterActual))
+            {
+                estadoActual = "q7";
+            }
+            else if (UtilTexto.EsSignoSlash(caracterActual))
+            {
+                estadoActual = "q8";
+            }
+            else if (UtilTexto.EsSignoPorcentaje(caracterActual))
+            {
+                estadoActual = "q9";
+            }
+            else if (UtilTexto.EsSignoParentesisA(caracterActual))
+            {
+                estadoActual = "q10";
+            }
+            else if (UtilTexto.EsSignoParentesisC(caracterActual))
+            {
+                estadoActual = "q11";
+            }
+            else if ((UtilTexto.EsEOF(caracterActual)))
             {
                 estadoActual = "q12";
             }
@@ -158,9 +238,9 @@ namespace Compilador_22023.AnalisisLexico
             {
                 estadoActual = "q13";
             }
-            else if ((UtilTexto.EsDigito(caracterActual)))
+            else if ((UtilTexto.EsSignoIgual(caracterActual)))
             {
-                estadoActual = "q1";
+                estadoActual = "q19";
             }
             else
             {
@@ -228,6 +308,60 @@ namespace Compilador_22023.AnalisisLexico
             }
 
         }
+        private void ProcesarEstado5()
+        {
+            categoria = "Suma";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+
+        }
+        private void ProcesarEstado6()
+        {
+            categoria = "Resta";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+
+        }
+        private void ProcesarEstado7()
+        {
+            categoria = "Multiplicación";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+
+        }
+        private void ProcesarEstado8()
+        {
+            LeerSiguienteCaracter();
+            if (UtilTexto.EsSignoAsterisco(caracterActual)){
+                estadoActual = "q34";
+            }else if (UtilTexto.EsSignoSlash(caracterActual))
+            {
+                estadoActual = "q36";
+            }
+            else
+            {
+                estadoActual = "q33";
+            }
+
+        }
+        private void ProcesarEstado9()
+        {
+            categoria = "Módulo";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+        }
+        private void ProcesarEstado10()
+        {
+            categoria = "Paréntesis Abre";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+        }
+        private void ProcesarEstado11()
+        {
+            categoria = "Paréntesis Cierra";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+        }
         private void ProcesarEstado12()
         {
             categoria = "Fin De Archivo";
@@ -277,6 +411,49 @@ namespace Compilador_22023.AnalisisLexico
             categoria = "Error Símbolo No Válido";
             FormarComponenteLexico();
             throw new Exception("Símbolo no reconocido dentro del lenguaje");
+        }
+        private void ProcesarEstado19()
+        {
+            categoria = "Igual que";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+        }
+        private void ProcesarEstado33()
+        {
+            DevolverPuntero();
+            categoria = "División";
+            FormarComponenteLexico();
+            continuarAnalisis = false;
+        }
+        private void ProcesarEstado34()
+        {
+            LeerSiguienteCaracter();
+            if (UtilTexto.EsSignoAsterisco(caracterActual))
+            {
+                estadoActual = "q35";
+            }
+
+        }
+        private void ProcesarEstado35()
+        {
+            LeerSiguienteCaracter();
+            if (UtilTexto.EsSignoSlash(caracterActual))
+            {
+                estadoActual = "q0";
+            }
+            else if (!UtilTexto.EsSignoAsterisco(caracterActual))
+            {
+                estadoActual = "q34";
+            }
+
+        }
+        private void ProcesarEstado36()
+        {
+            LeerSiguienteCaracter();
+            if (UtilTexto.EsFL(caracterActual))
+            {
+                estadoActual = "q13";
+            }
         }
 
         private void FormarComponenteLexico()

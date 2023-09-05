@@ -33,6 +33,54 @@ namespace Compilador_22023.Util
             return "$".Equals(caracter);
 
         }
+        public static bool EsSignoSuma(string caracter)
+        {
+
+            return "+".Equals(caracter);
+
+        }
+        public static bool EsSignoResta(string caracter)
+        {
+
+            return "-".Equals(caracter);
+
+        }
+        public static bool EsSignoAsterisco(string caracter)
+        {
+
+            return "*".Equals(caracter);
+
+        }
+        public static bool EsSignoSlash(string caracter)
+        {
+
+            return "/".Equals(caracter);
+
+        }
+        public static bool EsSignoPorcentaje(string caracter)
+        {
+
+            return "%".Equals(caracter);
+
+        }
+        public static bool EsSignoParentesisA(string caracter)
+        {
+
+            return "(".Equals(caracter);
+
+        }
+        public static bool EsSignoParentesisC(string caracter)
+        {
+
+            return ")".Equals(caracter);
+
+        }
+        public static bool EsSignoIgual(string caracter)
+        {
+
+            return "=".Equals(caracter);
+
+        }
 
         public static bool EsLetraDigito(string caracter)
         {

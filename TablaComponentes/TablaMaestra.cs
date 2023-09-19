@@ -8,5 +8,6 @@ namespace Compilador_22023.TablaComponentes
 {
     class TablaMaestra
     {
+
     }
 }

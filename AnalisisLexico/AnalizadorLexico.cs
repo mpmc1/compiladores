@@ -15,11 +15,11 @@ namespace Compilador_22023.AnalisisLexico
         private int puntero = 0;
         private string caracterActual= "";
         private string lexema = "";
-        private string categoria = "";
+        private CategoriaGramatical categoria = CategoriaGramatical.DEFECTO;
         private string estadoActual = "q0";
         private int posicionInicial = 0;
-        private int posicionFinal = 0;
         private bool continuarAnalisis = false;
+        private ComponenteLexico componente = null;
 
         public AnalizadorLexico()
         {
@@ -72,22 +72,20 @@ namespace Compilador_22023.AnalisisLexico
 
             estadoActual = "q0";
             lexema = "";
-            categoria = "";
+            categoria = CategoriaGramatical.DEFECTO;
             posicionInicial = 0;
-            posicionFinal = 0;
             continuarAnalisis = true;
+            componente = null;
         }
-        public void DevolverSiguienteComponente()
+        public ComponenteLexico DevolverSiguienteComponente()
         {
 
             Resetear();
-
             while (continuarAnalisis)
             {
                 if ("q0".Equals(estadoActual))
                 {
                     ProcesarEstado0();
-
                 }
                 else if ("q1".Equals(estadoActual))
                 {
@@ -182,11 +180,8 @@ namespace Compilador_22023.AnalisisLexico
                     ProcesarEstado36();
                 }
             }
-            //Temporal
-            while (!UtilTexto.EsEOF(caracterActual))
-            {
-                DevolverSiguienteComponente();
-            }
+
+            return componente;
 
         }
 
@@ -310,21 +305,24 @@ namespace Compilador_22023.AnalisisLexico
         }
         private void ProcesarEstado5()
         {
-            categoria = "Suma";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.SUMA;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
         }
         private void ProcesarEstado6()
         {
-            categoria = "Resta";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.RESTA;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
         }
         private void ProcesarEstado7()
         {
-            categoria = "Multiplicación";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.MULTIPLICACION;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
@@ -346,25 +344,28 @@ namespace Compilador_22023.AnalisisLexico
         }
         private void ProcesarEstado9()
         {
-            categoria = "Módulo";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.MODULO;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado10()
         {
-            categoria = "Paréntesis Abre";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.PARENTESIS_ABRE;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado11()
         {
-            categoria = "Paréntesis Cierra";
+            lexema = caracterActual;
+            categoria = CategoriaGramatical.PARENTESIS_CIERRA;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado12()
         {
-            categoria = "Fin De Archivo";
+            categoria = CategoriaGramatical.FIN_DE_ARCHIVO;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
@@ -377,7 +378,7 @@ namespace Compilador_22023.AnalisisLexico
         private void ProcesarEstado14()
         {
             DevolverPuntero();
-            categoria = "Número Entero";
+            categoria = CategoriaGramatical.NUMERO_ENTERO;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
@@ -385,7 +386,7 @@ namespace Compilador_22023.AnalisisLexico
         private void ProcesarEstado15()
         {
             DevolverPuntero();
-            categoria = "Decimal";
+            categoria = CategoriaGramatical.NUMERO_DECIMAL;
             FormarComponenteLexico();
             continuarAnalisis = false;
 
@@ -394,34 +395,36 @@ namespace Compilador_22023.AnalisisLexico
         private void ProcesarEstado16()
         {
             DevolverPuntero();
-            categoria = "Identificador";
+            categoria = CategoriaGramatical.IDENTIFICADOR;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado17()
         {
+            //ERROR NUMERO NO VÁLIDO
             DevolverPuntero();
-            categoria = "Error Decimal No Válido";
+            categoria = CategoriaGramatical.NUMERO_DECIMAL;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado18()
         {
+            //SIMBOLO NO VÁLIDO
             DevolverPuntero();
-            categoria = "Error Símbolo No Válido";
+            categoria = CategoriaGramatical.NO_DEFINIDA;
             FormarComponenteLexico();
             throw new Exception("Símbolo no reconocido dentro del lenguaje");
         }
         private void ProcesarEstado19()
         {
-            categoria = "Igual que";
+            categoria = CategoriaGramatical.IGUAL_QUE;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
         private void ProcesarEstado33()
         {
             DevolverPuntero();
-            categoria = "División";
+            categoria = CategoriaGramatical.DIVISION;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
@@ -459,13 +462,7 @@ namespace Compilador_22023.AnalisisLexico
         private void FormarComponenteLexico()
         {
             posicionInicial = puntero - lexema.Length;
-            posicionFinal = puntero - 1;
-
-            Console.WriteLine("Categoría: " + categoria);
-            Console.WriteLine("Lexema: " + lexema);
-            Console.WriteLine("Línea: " + numeroLineaActual);
-            Console.WriteLine("Pos. Inicial: " + posicionInicial);
-            Console.WriteLine("Pos. Final: " + posicionFinal);
+            componente = ComponenteLexico.CrearSimbolo(numeroLineaActual, posicionInicial, lexema, categoria);
         }
 
         private void DevorarEspaciosEnBlanco()

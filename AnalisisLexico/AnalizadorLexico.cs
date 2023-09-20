@@ -20,6 +20,7 @@ namespace Compilador_22023.AnalisisLexico
         private int posicionInicial = 0;
         private bool continuarAnalisis = false;
         private ComponenteLexico componente = null;
+        private TipoComponente tipo = TipoComponente.SIMBOLO;
 
         public AnalizadorLexico()
         {
@@ -76,8 +77,9 @@ namespace Compilador_22023.AnalisisLexico
             posicionInicial = 0;
             continuarAnalisis = true;
             componente = null;
-        }
-        public ComponenteLexico DevolverSiguienteComponente()
+            tipo = TipoComponente.SIMBOLO;
+    }
+    public ComponenteLexico DevolverSiguienteComponente()
         {
 
             Resetear();
@@ -404,6 +406,9 @@ namespace Compilador_22023.AnalisisLexico
             //ERROR NUMERO NO VÁLIDO
             DevolverPuntero();
             categoria = CategoriaGramatical.NUMERO_DECIMAL;
+            caracterActual = "0";
+            Concatenar();
+            tipo = TipoComponente.DUMMY;
             FormarComponenteLexico();
             continuarAnalisis = false;
         }
@@ -412,6 +417,7 @@ namespace Compilador_22023.AnalisisLexico
             //SIMBOLO NO VÁLIDO
             DevolverPuntero();
             categoria = CategoriaGramatical.NO_DEFINIDA;
+            tipo = TipoComponente.DUMMY;
             FormarComponenteLexico();
             throw new Exception("Símbolo no reconocido dentro del lenguaje");
         }

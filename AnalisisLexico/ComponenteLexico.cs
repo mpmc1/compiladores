@@ -58,7 +58,7 @@ namespace Compilador_22023.AnalisisLexico
             sb.Append("Número de línea: ").Append(NumeroLinea).Append("\r\n");
             sb.Append("Posicion Inicia: ").Append(PosicionInicial).Append("\r\n");
             sb.Append("Posicion Final: ").Append(PosicionFinal).Append("\r\n");
-            sb.Append("-------------------------------FIN-------------------------------");
+            sb.Append("-------------------------------FIN-------------------------------\r\n");
             return sb.ToString();
         }
 

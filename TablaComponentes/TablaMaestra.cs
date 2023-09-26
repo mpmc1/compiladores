@@ -9,11 +9,16 @@ namespace Compilador_22023.TablaComponentes
 {
     class TablaMaestra
     {
+        private static TablaMaestra TABLA_MAESTRA = new TablaMaestra();
         private TablaSimbolos tablaSimbolos = new TablaSimbolos();
         private TablaLiterales tablaLiterales = new TablaLiterales();
         private TablaPalabrasReservadas tablaPalabrasReservadas = new TablaPalabrasReservadas();
-        private TablaDummies tablaDummies = new TablaDummies(); 
+        private TablaDummies tablaDummies = new TablaDummies();
 
+        public static TablaMaestra ObtenerTablaMaestra()
+        {
+            return TABLA_MAESTRA;
+        }
         public void Limpiar()
         {
             tablaDummies.Limpiar();
@@ -32,7 +37,8 @@ namespace Compilador_22023.TablaComponentes
 
         public List<ComponenteLexico> ObtenerSimbolo(TipoComponente tipo, string lexema)
         {
-            switch (tipo){
+            switch (tipo)
+            {
                 case TipoComponente.SIMBOLO:
                     return tablaSimbolos.ObtenerSimbolo(lexema);
                 case TipoComponente.LITERAL:
@@ -62,4 +68,5 @@ namespace Compilador_22023.TablaComponentes
             }
 
         }
+    }
 }

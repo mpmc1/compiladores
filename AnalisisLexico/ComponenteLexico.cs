@@ -51,7 +51,7 @@ namespace Compilador_22023.AnalisisLexico
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("-------------------------------INICIO-------------------------------");
+            sb.Append("-------------------------------INICIO-------------------------------\r\n");
             sb.Append("Tipo: ").Append(Tipo).Append("\r\n");
             sb.Append("Categoria: ").Append(Categoria).Append("\r\n");
             sb.Append("Lexema: ").Append(Lexema).Append("\r\n");

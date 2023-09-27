@@ -1,4 +1,5 @@
 ﻿using Compilador_22023.cache;
+using Compilador_22023.GestorErrores;
 using Compilador_22023.TablaComponentes;
 using Compilador_22023.Util;
 using System;
@@ -21,6 +22,9 @@ namespace Compilador_22023.AnalisisLexico
         private int posicionInicial = 0;
         private bool continuarAnalisis = false;
         private ComponenteLexico componente = null;
+        private string falla = "";
+        private string causa = "";
+        private string solucion = "";
 
         public AnalizadorLexico()
         {
@@ -267,7 +271,7 @@ namespace Compilador_22023.AnalisisLexico
             Concatenar();
             LeerSiguienteCaracter();
 
-            if (UtilTexto.EsLetraDigito(caracterActual))
+            if (UtilTexto.EsDigito(caracterActual))
             {
                 estadoActual = "q3";
             }
@@ -404,9 +408,13 @@ namespace Compilador_22023.AnalisisLexico
         {
             //ERROR NUMERO NO VÁLIDO
             DevolverPuntero();
-            categoria = CategoriaGramatical.NUMERO_DECIMAL;
+            falla = "Número decimal no válido";
+            causa = "Se recibió luego del separador decimal el símbolo " + caracterActual;
+            solucion = "Asegurese que en la posición deseada se encuentre un dígito para formar un número decimal válido.";
+            ReportarErrorLexicoRecuperable();
             caracterActual = "0";
             Concatenar();
+            categoria = CategoriaGramatical.NUMERO_DECIMAL;
             FormarComponenteLexicoDummy();
             continuarAnalisis = false;
         }
@@ -414,9 +422,10 @@ namespace Compilador_22023.AnalisisLexico
         {
             //SIMBOLO NO VÁLIDO
             DevolverPuntero();
-            categoria = CategoriaGramatical.NO_DEFINIDA;
-            FormarComponenteLexicoDummy();
-            throw new Exception("Símbolo no reconocido dentro del lenguaje");
+            falla = "Símbolo no válido";
+            causa = "Se recibió el símbolo '" + caracterActual + "' no reconocido por el lenguaje.";
+            solucion = "Asegúrese que en la posición esperada se encuentre un símbolo válido reconocido por el lenguaje";
+            ReportarErrorLexicoStopper();
         }
         private void ProcesarEstado19()
         {
@@ -481,6 +490,18 @@ namespace Compilador_22023.AnalisisLexico
         {
             posicionInicial = puntero - lexema.Length;
             componente = ComponenteLexico.CrearPalabraReservada(numeroLineaActual, posicionInicial, lexema, categoria);
+        }
+        private void ReportarErrorLexicoRecuperable()
+        {
+            posicionInicial = puntero - lexema.Length;
+            Error error = Error.CrearErrorLexicoRecuperable(numeroLineaActual, posicionInicial, lexema, falla, causa, solucion);
+            ManejadorErrores.ObtenerManejadorDeErrores().ReportarError(error);
+        }
+        private void ReportarErrorLexicoStopper()
+        {
+            posicionInicial = puntero - lexema.Length;
+            Error error = Error.CrearErrorLexicoStopper(numeroLineaActual, posicionInicial, lexema, falla, causa, solucion);
+            ManejadorErrores.ObtenerManejadorDeErrores().ReportarError(error);
         }
 
         private void DevorarEspaciosEnBlanco()

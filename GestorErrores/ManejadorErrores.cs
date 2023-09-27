@@ -36,7 +36,7 @@ namespace Compilador_22023.GestorErrores
         {
             if (error != null)
             {
-                errores[error.Tipo].Add(error)
+                errores[error.Tipo].Add(error);
                 if (CategoriaError.STOPPER.Equals(error.Categoria))
                 {
                     StringBuilder sb = new StringBuilder();
@@ -50,7 +50,7 @@ namespace Compilador_22023.GestorErrores
         }
         public bool HayErrores(TipoError tipo)
         {
-            return errores.ContainsKey(tipo) && errores[tipo].Count > 0;
+            return errores[tipo].Count > 0;
         }
         public bool HayErroresAnalisis()
         {
@@ -63,6 +63,10 @@ namespace Compilador_22023.GestorErrores
         public bool HayErroresCompilación()
         {
             return HayErroresAnalisis() || HayErroresSintesis();
+        }
+        public List<Error> ObtenerErrores(TipoError tipo)
+        {
+            return errores[tipo];
         }
     }
 }

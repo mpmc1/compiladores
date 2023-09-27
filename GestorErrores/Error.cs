@@ -74,7 +74,7 @@ namespace Compilador_22023.GestorErrores
             sb.Append("Posicion Inicia: ").Append(PosicionInicial).Append("\r\n");
             sb.Append("Posicion Final: ").Append(PosicionFinal).Append("\r\n");
             sb.Append("Falla: ").Append(Falla).Append("\r\n");
-            sb.Append("Causa: ").Append(Causa).Append("\r\n")
+            sb.Append("Causa: ").Append(Causa).Append("\r\n");
             sb.Append("Solución Final: ").Append(Solucion).Append("\r\n");
 
             sb.Append("-------------------------------FIN-------------------------------\r\n");

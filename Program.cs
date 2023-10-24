@@ -1,7 +1,9 @@
 ﻿using Compilador_22023.AnalisisLexico;
+using Compilador_22023.AnalisisSintactico;
 using Compilador_22023.cache;
 using Compilador_22023.GestorErrores;
 using Compilador_22023.TablaComponentes;
+using System.Windows;
 
 namespace Compilador_22023
 {
@@ -10,20 +12,15 @@ namespace Compilador_22023
         static void Main(string[] args)
         {
             DataCache.AgregarLinea("");
-            DataCache.AgregarLinea("Segunda Línea");
-            DataCache.AgregarLinea("5 + 3 + 2 + 1");
-            DataCache.AgregarLinea("5,a");
+            //DataCache.AgregarLinea("Segunda Línea");
+            DataCache.AgregarLinea("5 +5 +3-4/20*100");
+            //DataCache.AgregarLinea("5,a");
 
-            AnalizadorLexico analex = new AnalizadorLexico();
+            RetoAnalizadorSintactico anasin = new RetoAnalizadorSintactico();
             try
             {
-                ComponenteLexico componente = analex.DevolverSiguienteComponente();
-
-                do
-                {
-                    componente = analex.DevolverSiguienteComponente();
-
-                } while (!CategoriaGramatical.FIN_DE_ARCHIVO.Equals(componente.Categoria));
+                string respuesta = anasin.Analizar();
+                Console.WriteLine(respuesta);
 
             }
             catch (Exception ex)

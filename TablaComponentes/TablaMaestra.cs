@@ -48,7 +48,7 @@ namespace Compilador_22023.TablaComponentes
                 case TipoComponente.DUMMY:
                     return tablaDummies.ObtenerSimbolo(lexema);
                 default:
-                    throw new Exception("Tipo de componente no válido");
+                    throw new Exception("Tipo de Componente no válido");
             }
         }
         public List<ComponenteLexico> ObtenerTodosSimbolos(TipoComponente tipo)
@@ -64,7 +64,7 @@ namespace Compilador_22023.TablaComponentes
                 case TipoComponente.DUMMY:
                     return tablaDummies.ObtenerTodosSimbolos();
                 default:
-                    throw new Exception("Tipo de componente no válido");
+                    throw new Exception("Tipo de Componente no válido");
             }
 
         }

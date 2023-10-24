@@ -16,6 +16,7 @@ namespace Compilador_22023.AnalisisSintactico
         private string falla = "";
         private string causa = "";
         private string solucion = "";
+        private Stack<double> pila = new Stack<double>();
 
         public string Analizar()
         {
@@ -27,13 +28,13 @@ namespace Compilador_22023.AnalisisSintactico
             {
                 resultado = "El proceso de compilación terminó con errores.\r\n";
             }
-            else if (!CategoriaGramatical.FIN_DE_ARCHIVO.Equals(Componente.Categoria))
+            else if (!CategoriaGramatical.FIN_DE_ARCHIVO.Equals(Componente.Categoria) || pila.Count > 1)
             {
                 resultado = "Aunque el programa no tiene errores, faltaron componentes por evaluar.\r\n";
             }
             else
             {
-                resultado = "El programa se encuentra bien escrito.\r\n";
+                resultado = "El programa se encuentra bien escrito. El resultado de la expresión es:\r\n" pila.Pop();
             }
 
             return resultado;
@@ -54,11 +55,13 @@ namespace Compilador_22023.AnalisisSintactico
             {
                 DevolverSiguienteComponenteLexico();
                 Expresion();
+                EvaluarExpresion(CategoriaGramatical.SUMA);
             }
             else if (EsCategoriaValida(CategoriaGramatical.RESTA))
             {
                 DevolverSiguienteComponenteLexico();
                 Expresion();
+                EvaluarExpresion(CategoriaGramatical.RESTA);
             }
         }
         private void Termino()
@@ -73,11 +76,13 @@ namespace Compilador_22023.AnalisisSintactico
             {
                 DevolverSiguienteComponenteLexico();
                 Termino();
+                EvaluarExpresion(CategoriaGramatical.MULTIPLICACION);
             }
             else if(EsCategoriaValida(CategoriaGramatical.DIVISION))
             {
                 DevolverSiguienteComponenteLexico();
                 Termino();
+                EvaluarExpresion(CategoriaGramatical.DIVISION);
             }
 
         }
@@ -85,6 +90,7 @@ namespace Compilador_22023.AnalisisSintactico
         {
             if(EsCategoriaValida(CategoriaGramatical.NUMERO_ENTERO))
             {
+                pila.Push()
                 DevolverSiguienteComponenteLexico();
             }
             else if(EsCategoriaValida(CategoriaGramatical.NUMERO_DECIMAL))
@@ -124,6 +130,35 @@ namespace Compilador_22023.AnalisisSintactico
             Error error = Error.CrearErrorSintacticoStopper(Componente.NumeroLinea, Componente.PosicionInicial, 
                 Componente.Lexema, falla, causa, solucion);
             ManejadorErrores.ObtenerManejadorDeErrores().ReportarError(error);
+        }
+        private void ReportarErrorSemanticoRecuperable()
+        {
+            Error error = Error.CrearErrorSemanticoRecuperable(Componente.NumeroLinea, Componente.PosicionInicial, 
+                Componente.Lexema, falla, causa, solucion);
+            ManejadorErrores.ObtenerManejadorDeErrores().ReportarError(error);
+        }
+        private void EvaluarExpresion(CategoriaGramatical categoria){
+            if(!ManejadorErrores.ObtenerManejadorDeErrores().HayErroresAnalisis()){
+                double operandoDerecha = pila.Pop();
+                double operandoIzquierda = pila.Pop();
+                if(CategoriaGramatical.SUMA.Equals(categoria)){
+                    pila.Push(operandoIzquierda + operandoDerecha);
+                }else if(CategoriaGramatical.RESTA.Equals(categoria)){
+                    pila.Push(operandoIzquierda - operandoDerecha);
+                }else if(CategoriaGramatical.MULTIPLICACION.Equals(categoria)){
+                    pila.Push(operandoIzquierda * operandoDerecha);
+                }else if(CategoriaGramatical.DIVISION.Equals(categoria)){
+                    if(operandoDerecha == 0){
+                        falla = "Categoria gramatical inválida";
+                    causa = "Se esperaba un número diferente de cero para realizar la división" + Componente.Categoria;
+                    solucion = "Asegurese que en la posición esperada se encuentre un número diferente de cero";
+                ReportarErrorSintacticoStopper();
+                    }else{
+                        pila.Push(operandoIzquierda / operandoDerecha);
+                    }
+                }
+            }
+
         }
     }
 }

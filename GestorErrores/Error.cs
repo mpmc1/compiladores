@@ -67,6 +67,12 @@ namespace Compilador_22023.GestorErrores
         {
             return new Error(numeroLinea, posicionInicial, posicionInicial + lexema.Length, lexema, falla, causa, solucion, TipoError.SINTACTICO, CategoriaError.STOPPER);
         }
+        public static Error CrearErrorSemanticoRecuperable(int numeroLinea, int posicionInicial, string lexema, string falla, string causa, string solucion)
+        {
+
+            return new Error(numeroLinea, posicionInicial, posicionInicial + lexema.Length, lexema, falla, causa, solucion, TipoError.SEMANTICO, CategoriaError.RECUPERABLE);
+
+        }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
